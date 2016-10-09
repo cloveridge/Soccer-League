@@ -1,13 +1,12 @@
-"""A module which loads a .csv of soccer players, sorts them into teams according to their experience,
-and generates a text file letter to their parents, informing them of their new team and the time/date
-of their first practice.
-"""
-
 import csv
 
 
 def main_function():
-
+	"""
+	A module which loads a .csv of soccer players, sorts them into teams according to their experience,
+	and generates a text file letter to their parents, informing them of their new team and the time/date
+	of their first practice.
+	"""
 	exp_players = []
 	new_players = []
 	sharks = []
@@ -15,7 +14,7 @@ def main_function():
 	raptors = []
 	teams = [sharks, dragons, raptors]
 
-	# import the csv data into a list of dicts.
+	# import the csv data into a list of experienced and inexperienced players.
 	with open("soccer_players.csv","r") as csvfile:
 		player_reader = csv.DictReader(csvfile)
 		for row in player_reader:
@@ -38,7 +37,7 @@ def main_function():
 			player["team"] = "Raptors"
 			raptors.append(player)
 
-	# Assign the remaining players randomly
+	# Assign the remaining players
 	for player in new_players:
 		if len(sharks) <= len(dragons) and len(sharks) <= len(raptors):
 			player["team"] = "Sharks"
@@ -50,12 +49,16 @@ def main_function():
 			player["team"] = "Raptors"
 			raptors.append(player)
 
+	#Write the letters
 	for team in teams:
 		for player in team:
 			write_letter(player["name"], player["team"], player["guardian"])
 
 
 def write_letter(player, team, guardian):
+	"""
+	generates a .txt "letter" which can be printed or emailed
+	"""
 	practice_date = ""
 	if team.lower == "dragons":
 		practice_date = "March 17, at 1pm"
@@ -63,7 +66,8 @@ def write_letter(player, team, guardian):
 		practice_date = "March 17, at 3pm"
 	else:
 		practice_date = "March 18, at 1pm"
-
+	
+	# Make an acceptable filename
 	filename = player.replace(" ", "_").lower() + ".txt"
 
 	with open(filename, "w") as file:
